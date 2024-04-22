@@ -1,0 +1,16 @@
+## 	InnoDB is a storage that both Wordpress && MariaDB can use so for compatibility we use InnoDB
+# Set the default storage engine to InnoDB
+default-storage-engine = InnoDB
+
+# Set the size of the InnoDB buffer pool (MEM size)
+innodb_buffer_pool_size = 128M
+
+## This is for the support of a wide range of character including emojis
+# Set the server character set to UTF-8
+character-set-server = utf8mb4
+
+# Set the server collation to utf8mb4_unicode_ci
+collation-server = utf8mb4_unicode_ci
+
+# Important to enable log_error for easier troubleshooting.
+log_error = /var/log/mysql/error.log

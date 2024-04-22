@@ -16,10 +16,3 @@ EXPOSE 443
 
 # This will run the nginx with a global change that the nginx deamon is turned off (this will allow that docker can keep running nginx) 
 CMD ["nginx", "-g", "daemon off;"]
-
-RUN service mysql start && \
-	mysql -e "CREATE USER 'root'@'localhost' IDENTIFIED BY '$(ROOT_PASSWORD)';" && \
-    mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;" && \
-    mysql -e "CREATE USER 'user'@'localhost' IDENTIFIED BY '${USER_PASSWORD}';" && \
-    mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost';" && \
-    service mysql stop
