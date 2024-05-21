@@ -1,21 +1,27 @@
-FROM debian:12-slim
+FROM debian:bullseye
 
-#Install MariaDB
-RUN apt-get update && \
-	apt-get install -y mariadb-server && \
-	apt-get clean
+RUN apt update -y && apt upgrade -y
+# gettext-base provides the envsubst command
+RUN apt install -y\
+	mariadb-server\
+	gettext-base
 
-# Clean up any unsessesary apt packeges to save up disk space.
-RUN rm -rf /var/lib/apt/lists/*
+# Not sure what this does, but removing it breaks mariadb
+RUN mkdir -p /var/run/mysqld;\
+	chmod 777 /var/run/mysqld /var/lib/mysql;
 
-# Copy the configuration setting for the MariaDB sever
-COPY conf/mariadb.cnf /etc/mysql/mariadb.cnf
+# Allows wordpress to connect using the name mariadb otherwise error establishing database connection
+RUN sed 's/bind-address .*/bind-address = mariadb/' -i /etc/mysql/mariadb.conf.d/50-server.cnf
 
-# Copy the SQL initialization script into the container
-COPY init.sql /docker-entrypoint-initdb.d/init.sql
+# Connect mariadb with the database_volume /var/lib/mysql
+# we set up in docker-compose.yml
+RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-#Expose port 3306 to make sure mariadb can communicate to the Wordpress Server
-EXPOSE 3306
+COPY ./tools/init_mariadb.sh /home/
+COPY ./tools/init.sql /home/
 
-CMD [ "mysql" ]
+RUN chmod 777 /home/init_mariadb.sh
+RUN chmod 777 /home/init.sql
+
+CMD [ "/home/init_mariadb.sh" ]
 
