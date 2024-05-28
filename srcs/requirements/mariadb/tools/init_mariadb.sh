@@ -1,22 +1,19 @@
-#!/bin/bash
+#!bin/bash
 
-# Exit immediately on command error
-set -e
-
-# Since /var/lib/mysql is the persistent volume,
-# we don't need to do this every time the container boots,
-if [ ! -d "/var/lib/mysql/$DB_NAME" ]; then
-	echo "Initializing mariadb database"
-
-	# envsubst fills the environment variables from init.sql
-	# --bootstrap tells mariadbd to use its stdin
-	echo "Bootstrapping mariadbd"
-	< /home/init.sql envsubst | mariadbd --bootstrap
-
-	echo "Initialized mariadb database"
+# Check if the specified database (defined in .env) directory exists
+if [ -d "/var/lib/mysql/$DB_NAME" ]; then 
+    echo "Database already exists"
 else
-	echo "mariadb database was already initialized"
+    {
+        echo "FLUSH PRIVILEGES;"
+        echo "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+        echo "CREATE USER IF NOT EXISTS $DB_USER@'localhost' IDENTIFIED BY '$DB_USER_PASSWORD';"
+        echo "GRANT ALL ON *.* TO $DB_USER@'localhost' IDENTIFIED BY '$DB_USER_PASSWORD';"
+        echo "FLUSH PRIVILEGES;"
+    } | mysqld --bootstrap
 fi
 
-echo "Running mariadbd"
-mariadbd
+echo "executing mysql daemon"
+exec mysqld
+# using exec allows child processes to recieve the sigterm from docker stop,
+# allowing for clean shutdowns

@@ -36,5 +36,7 @@ clean:
 	docker volume rm $$(docker volume ls -q) 2> /dev/null || exit 0
 	docker network rm $$(docker network ls -q) 2> /dev/null || exit 0
 	docker builder prune -f
+	docker container prune --force
+	docker image prune --all --force
 	sudo rm -rf $(MARIADB_VOLUME)
 	sudo rm -rf $(WORDPRESS_VOLUME)

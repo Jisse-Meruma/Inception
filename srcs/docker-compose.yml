@@ -13,7 +13,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wordpress:/var/www/html/
+      - wordpress:/var/www/html
     restart: on-failure
 
   mariadb:
@@ -25,6 +25,11 @@ services:
     env_file: .env
     volumes:
       - mariadb:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 1s
+      retries: 10
+
     restart: on-failure
 
   wordpress:
@@ -35,7 +40,7 @@ services:
       - inception
     env_file: .env
     volumes:
-      - wordpress:/var/www/
+      - wordpress:/var/www/html
     depends_on:
       - mariadb
     restart: on-failure
