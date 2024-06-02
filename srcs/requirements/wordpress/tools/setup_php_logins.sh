@@ -26,7 +26,7 @@ else
         wp-cli config create --path="/var/www/html" \
                         --dbname="$DB_NAME" \
                         --dbuser="$DB_USER" \
-                        --dbpass="$DB_ROOT_PASSWORD" \
+                        --dbpass="$DB_USER_PASSWORD" \
                         --dbhost="$DB_HOST" \
                         --allow-root
 
@@ -52,11 +52,11 @@ else
 
     # installing Wordpress core
     wp-cli core install --path="/var/www/html" \
-                    --title="wordpress" \
+                    --title="$WP_ADMIN_TITLE" \
                     --admin_user="$WP_ADMIN_NAME" \
                     --admin_password="$WP_ADMIN_PASSWORD" \
-                    --admin_email="admin@admin.com" \
-                    --url="https://jmeruma.codam.nl/" \
+                    --admin_email="$WP_ADMIN_EMAIL" \
+                    --url="$WP_ADMIN_URL" \
                     --skip-email \
                     --allow-root
 

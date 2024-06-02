@@ -15,7 +15,6 @@ RUN chmod +x /usr/local/bin/wp-cli
 
 RUN mkdir /run/php
 
-
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/
 RUN sed -i "s/listen.*/listen = 9000/g" /etc/php/7.4/fpm/pool.d/www.conf
 
