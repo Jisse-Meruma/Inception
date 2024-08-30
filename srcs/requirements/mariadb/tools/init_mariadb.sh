@@ -9,7 +9,8 @@ else
         echo "FLUSH PRIVILEGES;"
         echo "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
         echo "CREATE USER IF NOT EXISTS $DB_USER@'%' IDENTIFIED BY '$DB_USER_PASSWORD';"
-        echo "GRANT ALL PRIVILEGES ON *.* TO $DB_USER@'%' IDENTIFIED BY '$DB_USER_PASSWORD';"
+        echo "GRANT ALL PRIVILEGES ON $DB_NAME.* TO $DB_USER@'%';"
+        echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD';";
         echo "FLUSH PRIVILEGES;"
     } | mysqld --bootstrap
         fi
