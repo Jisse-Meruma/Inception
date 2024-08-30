@@ -15,11 +15,17 @@ RUN chmod +x /usr/local/bin/wp-cli
 
 RUN mkdir /run/php
 
+# PHP-FPM Is a fastcgi process manager for PHP
+
+# Copy the configuration file for PHP-FPM
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/
+
+# Change the listen directive to listen on port 9000
 RUN sed -i "s/listen.*/listen = 9000/g" /etc/php/7.4/fpm/pool.d/www.conf
 
 COPY ./tools/setup_php_logins.sh /home/
 
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
+
 CMD [ "/home/setup_php_logins.sh" ]

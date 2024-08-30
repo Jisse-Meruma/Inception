@@ -3,6 +3,7 @@
 # Check if the specified database (defined in .env) directory exists
 if [ -d "/var/lib/mysql/$DB_NAME" ]; then 
     echo "Database already exists"
+# If the database does not exist, create it and create a user with all privileges
 else
     {
         echo "FLUSH PRIVILEGES;"

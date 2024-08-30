@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y nginx && apt install -y openssl
 #Copy the Host configs to the container nginx folder
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
-#this is for supporting TLS
+#this is for supporting TLS aka HTTPS SSL = secure socket layer TLS = Transport Layer Security
 RUN mkdir -p /etc/nginx/ssl && \
 	openssl req -newkey rsa:4096 -x509 -sha256 -days 365 \
 	-nodes \
